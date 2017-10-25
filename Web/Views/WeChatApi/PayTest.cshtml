@@ -1,0 +1,91 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>PayTest</title>
+</head>
+<body>
+    <div>
+        <input type="button" value="支付" onclick="pay()" />
+    </div>
+
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+    <script>
+        var prepayId
+        $(function () {
+            $.ajax({
+                url: '/WeChatApi/GetJsApiConfig',
+                type: 'post',
+                data: {
+                    currentPage: window.location.href
+                },
+                complete: function (d) {
+                    var data = JSON.parse(d.responseText)
+                    wx.config({
+                        debug: true,
+                        appId: data.appId,
+                        timestamp: data.timestamp,
+                        nonceStr: data.nonceStr,
+                        signature: data.signature,
+                        jsApiList: data.jsApiList
+                    });
+                }
+            })
+
+            $.ajax({
+                url: '/WeChatApi/GetPrepayId',
+                type: 'post',
+                data: {
+                    body: '支付测试',
+                    orderNumber: (new Date() - new Date("1970")) + '',
+                    total: 1 + '',
+                    notify: 'http://wx.osintell.com/Login',
+                    openId: 'oNM8u0xQ-DZOFDCiHdBmVdQYpdks'
+                },
+                complete: function (d) {
+                    var obj = JSON.parse(d.responseText)
+                    if (obj.code === 1) {
+                        prepayId = obj.data
+                    } else {
+                        console.log(d.responseText)
+                        alert(obj.msg)
+                    }
+                }
+            })
+        })
+
+        function pay() {
+            if (!prepayId) {
+                alert("没有预支付信息, 请检查代码,以及日志输入");
+                return
+            }
+            $.ajax({
+                url: '/WeChatApi/GetBrandWcPay',
+                type: 'post',
+                data: {
+                    prepayId: prepayId
+                },
+                complete: function (d) {
+                    console.log(d.responseText)
+                    WeixinJSBridge.invoke('getBrandWCPayRequest',
+                        JSON.parse(d.responseText)
+                        , function (res) {
+                            console.info(res);
+                            console.debug(res);
+                            JSON.stringify()
+                            if (res.err_msg == "get_brand_wcpay_request:ok") {
+                            }
+                        });
+                }
+            })
+        }
+    </script>
+</body>
+</html>
