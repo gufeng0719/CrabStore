@@ -190,7 +190,7 @@ namespace Web.Controllers
                 x.ProductStock,//库存
                 TypeName = "蟹塘直采",
                 x.ProductState//库存状态
-            });
+            }).OrderBy(x=>x.ProductWeight);
 
             //蟹塘直采母蟹列表
             List<CsProducts> proList4 = (from product4 in productList
@@ -209,7 +209,7 @@ namespace Web.Controllers
                 x.ProductStock,//库存
                 TypeName = "蟹塘直采",
                 x.ProductState//库存状态
-            });
+            }).OrderBy(x=>x.ProductWeight);
 
             //可选配件列表
             var partList = _csPartsBll.GetModelList(" and PartType=2 and PartState=1 ").Select(x => new
