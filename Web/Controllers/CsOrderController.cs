@@ -299,7 +299,8 @@ namespace Web.Controllers
                     计费重量单位KG = "-",
                     业务类型 = "大闸蟹专递",
                     扩展字段1 = detail.Any(x => x.OrderId == order.OrderId && x.ChoseType == ChoseType.套餐.GetHashCode()) ? "企业团购" : "电商代发",
-                    扩展字段2 = order.OrderRemarks
+                    扩展字段2 = order.OrderRemarks,
+                    订单金额 = order.ActualMoney.ToString("C")
                 });
             }
             var path = $"excel/{DateTime.Now:yyyyMMddHHmmssffff}.xls";

@@ -162,7 +162,7 @@ namespace Model.ViewModel
             public string 高单位CM { get; set; } = string.Empty;
             public string 扩展字段1 { get; set; } = string.Empty;
             public string 扩展字段2 { get; set; } = string.Empty;
-            public string 扩展字段3 { get; set; } = string.Empty;
+            public string 订单金额 { get; set; } = string.Empty;
             public string 扩展字段4 { get; set; } = string.Empty;
 
 
